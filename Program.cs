@@ -9,8 +9,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<ICalculationService, CalculationService>();
+builder.Services.AddTransient<IApiWorker, ApiWorker>();
+builder.Services.AddTransient<IParserService, ParserService>();
 builder.Services.AddHttpClient("calculator",client =>
 {
+    client.BaseAddress = new Uri("http://api.cdek.ru/calculator/calculate_price_by_json.php");
     client.DefaultRequestHeaders.Add("Accept", "application/json");
 });
 builder.Services.AddHttpClient("location", client =>

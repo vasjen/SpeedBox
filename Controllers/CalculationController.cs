@@ -24,10 +24,20 @@ public class CalculationController : ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(typeof(CalculationResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Post(CalculationRequest request)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
         _logger.LogInformation("Calculation request received");
         var result = await _calculationService.Calculate(request);
+        if (result == null)
+        {
+            return BadRequest("City not found or other problem. Check your request");
+        }
         return Ok(result);
     }
    
